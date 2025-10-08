@@ -1,0 +1,8 @@
+# InterSystems Python Driver
+intersystems-irispython 
+
+# used for creating embedding models from plain text
+sentence-transformers 
+
+# Used for tabular data handling
+pandas
