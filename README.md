@@ -53,4 +53,8 @@ This is a start-to-finish tutorial which goes through:
 2. Pass prompt to a Large Language Model
 3. Return output to user
 
+## Video Demo
+
+https://github.com/user-attachments/assets/e6d24c52-a4f8-4d73-be62-fa39352515b8
+
 
