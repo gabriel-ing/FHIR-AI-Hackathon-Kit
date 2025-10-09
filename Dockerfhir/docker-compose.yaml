@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     ports:
       - "32783:52773"  # Map local port 8080 to IRIS web port 52773
-      - "32783:1972"  # Map local port 1972 to iris for health superserver port 1972
+      - "32782:1972"  # Map local port 1972 to iris for health superserver port 1972
     volumes:
       - ./data:/data  # Map local 'data' directory to '/data' inside container
     environment:
