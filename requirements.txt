@@ -6,3 +6,12 @@ sentence-transformers
 
 # Used for tabular data handling
 pandas
+
+## Used for easier downloading and parsing of fhir resources
+fhirpy
+
+## Used for creating and validating FHIR resources
+fhir.resources
+
+# Used for creating very basic local LLMs 
+transformers

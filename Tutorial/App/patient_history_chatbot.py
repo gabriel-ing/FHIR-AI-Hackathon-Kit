@@ -3,7 +3,7 @@ from langchain_ollama import OllamaLLM
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 from sentence_transformers import SentenceTransformer
-from ..Utils.get_iris_connection import get_cursor
+from Utils.get_iris_connection import get_cursor
 import logging
 import warnings
 
@@ -17,7 +17,7 @@ class RAGChatbot:
         self.cursor = get_cursor()
         self.conversation = self.create_conversation()
         self.embedding_model = self.get_embedding_model()
-        
+        self.patient_id = 0
 
     def get_embedding_model(self):
         return  SentenceTransformer('all-MiniLM-L6-v2') 
@@ -46,39 +46,42 @@ class RAGChatbot:
         results = self.cursor.fetchall()
         return results
 
-    def run(self):
-        if self.message_count==0:
-            query = input("\n\nHi, I'm a chatbot used for searching a patient's medical history. How can I help you today? \n\n - User: ")
-        else:
-            query = input("\n - User:")
-        search = True
-        if self.message_count != 0:
-            search_ans = input("- Search the database? [Y/N - default N]")
-            if search_ans.lower() != "y":
-                search = False
+    def set_patient_id(self, patient_id):
+        self.patient_id=patient_id
 
-        if search:
-            try:
-                patient_id = int(input("- What is the patient ID? "))
-            except:
-                print("ERROR: The patient ID should be an integer")
-                print("Exiting. Please send another prompt.")
-                return
-
-            results = self.vector_search(query, patient_id)
+    def run(self, user_prompt: str, do_search: bool = True) -> str:
+        """
+        Execute one turn of the chat. Returns the assistant's reply as a string.
+        Requires self.patient_id to be set before calling if do_search is True.
+        """
+        if do_search:
+            if not self.patient_id:
+                raise ValueError("Patient ID is not set. Call set_patient_id(...) first.")
+            results = self.vector_search(user_prompt, self.patient_id)
             if results == []:
-                print("No results found, check patient ID")
-                return
-
-            prompt = f"CONTEXT:\n{results}\n\nUSER QUESTION:\n{query}"
+                # Optional: keep going but with an explicit note
+                context = "No results found for this patient ID."
+            else:
+                # Assumes rows like [(ClinicalNotes,), ...]
+                context_parts = []
+                for r in results:
+                    text = r[0] if isinstance(r, (list, tuple)) and len(r) == 1 else str(r)
+                    context_parts.append(str(text))
+                context = "\n---\n".join(context_parts)
+            prompt = f"CONTEXT:\n{context}\n\nUSER QUESTION:\n{user_prompt}"
         else:
-            prompt = f"USER QUESTION:\n{query}"
+            prompt = f"USER QUESTION:\n{user_prompt}"
 
-        ##print(prompt)
         response = self.conversation.predict(input=prompt)
-        
-        print("- Chatbot: "+ response)
         self.message_count += 1
+        return response
+
+    def reset(self):
+        self.message_count = 0
+        self.conversation = self.create_conversation()
+        # keep the same patient, or also reset it if you prefer:
+        # self.patient_id = 0
+
 
 
 if __name__=="__main__":
