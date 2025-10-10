@@ -4,13 +4,32 @@ This repository contains tutorials for how to use InterSystems IRIS with an exte
 
 ## Contents 
 
-This repo has 3 main sections: 
-- **Tutorial**: contains several markdown and ipython notebook files which show how to set up a FHIR server, create SQL tables and implement a vector search in IRIS. It also contains a basic example of how this can be used to create a RAG chatbot (see video below).
-- **Additional Demos** - Some additional tutorials with other ways to use the IRIS FHIR server with Python. For example, it demonstrates a method to create new FHIR resources. These aren't used in the main tutorial sequence, but may be useful to your solutions.
+This repo has 4 main sections: 
+- **Tutorial**: contains several markdown and ipython notebook files:
+    - How to set up a FHIR server with Docker
+    - How to create SQL tables from a FHIR Server with FHIR-SQL Builder
+    - Implementing a vector search
+    - Creating a chatbot
+- **Additional Demos** - Some additional tutorials with other ways to use the IRIS FHIR server with Python. This includes: 
+    - Accessing FHIR resources directly
+    - Adding data to the FHIR server
+    - Generating Synthetic data
+    - Links to a demo of Vibe-coding a UI for a FHIR server
 - **Resources** - Some brief introductions that may be useful to get started quickly. These include: 
     - What is InterSystems IRIS
     - What is Results augmented generation (RAG)
     - What is FHIR
+- **Dockerfhir** - Files to create a local IRIS-health-community instance and FHIR server with Docker. The main tutorial covers how this should be used. 
+
+## Requirements 
+
+- **DOCKER** - The IRIS-health instance and FHIR server in all examples are run in a docker container, for this you will need to install [Docker](https://www.docker.com/)
+
+- **Ollama** - The last step of the main tutorial is to query a local Large Language model, which I have done through Ollama. If you are interested in using a local chatbot, you're best to install Ollama which can be done from their [website](https://ollama.com/).
+
+- **IRIS-Python Driver** - You will also need the InterSystems python driver throughout, this can be installed with pip: `pip install intersystems-irispython`. 
+ 
+- **Other Python Packages** - Various other python packages are used throughout, these are listed in the requirements.txt file and can be installed easily: `pip install -r requirements.txt`. I've stated whenever a new pacakage is used throughout the demos, so if you'd rather only install the packages you need you can skip this and install the remaining packages when you need them.
 
 
 # FHIR + AI Chatbot Demo
