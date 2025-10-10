@@ -6,9 +6,9 @@ To start, clone this repository:
 
 	git clone https://github.com/gabriel-ing/FHIR-AI-Hackathons
 
-Then enter FHIR-AI-Hackathons/Dockerfhir/Dockerfhir:
+Then enter FHIR-AI-Hackathons/Dockerfhir:
 
-	cd FHIR-AI-Hackathons/Dockerfhir/Dockerfhir
+	cd FHIR-AI-Hackathons/Dockerfhir
 
 and run: 
 
