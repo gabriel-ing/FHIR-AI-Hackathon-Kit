@@ -33,3 +33,6 @@ Open your browser and go to:
 
 In the docker compose file, I have mapped the container ports 1972 and 52773 to 32782 and 32783. 
 
+### Next steps
+
+Now you have installed the FHIR server you can continue with the main tutorial with [1-Using-FHIR-SQL-builder](".\1-Using-FHIR-SQL-Builder.ipynb")
