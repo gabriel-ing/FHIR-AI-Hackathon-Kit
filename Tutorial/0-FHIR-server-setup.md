@@ -35,4 +35,5 @@ In the docker compose file, I have mapped the container ports 1972 and 52773 to 
 
 ### Next steps
 
-Now you have installed the FHIR server you can continue with the main tutorial with [1-Using-FHIR-SQL-builder](".\1-Using-FHIR-SQL-Builder.ipynb")
+Now you have installed the FHIR server you can continue with the main tutorial with [1-Using-FHIR-SQL-builder](1-Using-FHIR-SQL-Builder.ipynb), or check out the additional demos on [Accessing FHIR Resources](../Additional-demos/Accessing-FHIR-resources.ipynb), 
+[Adding FHIR Data](../Additional-demos\Adding-FHIR-data-to-IRIS-health.ipynb) and [making synthetic FHIR data](../Additional-demos/Making-synthetic-fhir-data.md).
