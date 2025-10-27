@@ -4,7 +4,7 @@ In this tutorial, we will be using an instance of IRIS-health with a FHIR server
 
 To start, clone this repository: 
 
-	git clone https://github.com/gabriel-ing/FHIR-AI-Hackathon-kit
+	git clone https://github.com/gabriel-ing/FHIR-AI-Hackathon-Kit
 
 Then enter FHIR-AI-Hackathons/Dockerfhir:
 
