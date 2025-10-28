@@ -6,13 +6,13 @@ To start, clone this repository:
 
 	git clone https://github.com/gabriel-ing/FHIR-AI-Hackathon-Kit
 
-Then enter FHIR-AI-Hackathons/Dockerfhir:
+Then enter FHIR-AI-Hackathon-Kit/Dockerfhir:
 
-	cd FHIR-AI-Hackathons/Dockerfhir
+	cd FHIR-AI-Hackathon-Kit/Dockerfhir
 
 and run: 
 
-	docker pull containers.intersystems.com/intersystems/irishealth-community:latest-em
+	docker pull intersystems/irishealth-community:latest-em
 
 to download the container, and 
 

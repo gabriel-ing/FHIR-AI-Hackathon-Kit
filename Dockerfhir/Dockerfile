@@ -1,5 +1,5 @@
 # Use the official InterSystems IRIS for Health Community Edition image
-FROM containers.intersystems.com/intersystems/irishealth-community:latest-em
+FROM intersystems/irishealth-community:latest-em
 
 # Switch to the root user to perform administrative tasks
 USER root
