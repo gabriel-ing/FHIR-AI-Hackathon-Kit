@@ -10,7 +10,10 @@ Then enter FHIR-AI-Hackathon-Kit/Dockerfhir:
 
 	cd FHIR-AI-Hackathon-Kit/Dockerfhir
 
-and run: 
+
+**For the next step you need to have [docker](https://www.docker.com/products/docker-desktop/) installed and running on your system.**
+
+Run: 
 
 	docker pull intersystems/irishealth-community:latest-em
 

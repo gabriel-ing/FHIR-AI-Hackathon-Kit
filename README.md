@@ -17,7 +17,7 @@ This repo has 4 main sections:
     - Links to a demo of Vibe-coding a UI for a FHIR server
 - **Resources** - Some brief introductions that may be useful to get started quickly. These include: 
     - What is InterSystems IRIS
-    - What is Results augmented generation (RAG)
+    - What is Retrieval augmented generation (RAG)
     - What is FHIR
 - **Dockerfhir** - Files to create a local IRIS-health-community instance and FHIR server with Docker. The main tutorial covers how this should be used. 
 
