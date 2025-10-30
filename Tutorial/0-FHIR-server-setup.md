@@ -1,6 +1,8 @@
 # Setting up IRIS-Health with a FHIR server
 
-In this tutorial, we will be using an instance of IRIS-health with a FHIR server, from within a docker container. There are lots of good tutorials on how to use [IRIS-community editions with docker](https://community.intersystems.com/post/running-intersystems-iris-docker-step-step-guide-part-1-basics-custom-dockerfile), but for now I am going to use a pre-loaded build. I've cloned a [IRIS-health + FHIR docker starter repo](https://github.com/pjamiesointersystems/Dockerfhir/tree/main) into this repository so I could change some things, notably I am pre-loading a different dataset, I am also publishing other ports.
+In this tutorial, we will be using an instance of IRIS-health with a FHIR server, from within a docker container. There are lots of good tutorials on how to use [IRIS-community editions with docker](https://community.intersystems.com/post/running-intersystems-iris-docker-step-step-guide-part-1-basics-custom-dockerfile), but for now I am going to use a pre-loaded build. This repository includes a docker template forked from [IRIS-health + FHIR docker starter repo](https://github.com/pjamiesointersystems/Dockerfhir/tree/main). The template supplied here has minor changes (different ports published), but are functionally the same. 
+
+If you would rather set up a FHIR server from scratch with a clean edition of IRIS-health-community, there is a tutorial to [Create a FHIR Server in 5 minutes](../Additional-demos/CreateAFHIRServerIn5Minutes.md).
 
 To start, clone this repository: 
 
@@ -15,16 +17,21 @@ Then enter FHIR-AI-Hackathon-Kit/Dockerfhir:
 
 Run: 
 
-	docker pull intersystems/irishealth-community:latest-em
+```
+docker pull intersystems/irishealth-community:latest-em
+```
 
 to download the container, and 
 
-	docker-compose build 
+```
+docker-compose build
+```
 
 to build the deployment. These two steps will take a while to run. But then you can start up the container with: 
 
-	docker-compose up -d 
-
+```
+docker-compose up -d 
+```
 the -d flag makes it run in the background. 
 
 **1. Access the IRIS Management Portal**
@@ -34,7 +41,7 @@ Open your browser and go to:
 - **Username:** `_SYSTEM`
 - **Password:** `ISCDEMO`
 
-In the docker compose file, I have mapped the container ports 1972 and 52773 to 32782 and 32783. 
+In the docker compose file, the container ports 1972 and 52773 have been mapped to 32782 and 32783 respectively. 
 
 ### Next steps
 
