@@ -1,0 +1,34 @@
+[
+  {
+    "resourceType": "DocumentReference",
+    "id": "example-1",
+    "status": "current",
+    "subject": {
+      "reference": "Patient/3"
+    },
+    "content": [
+      {
+        "attachment": {
+          "contentType": "text/plain",
+          "data": "UGF0aWVudCByZXBvcnRzIGNoZXN0IHBhaW4gYW5kIHNob3J0bmVzcyBvZiBicmVhdGguIFByZXNjcmliZWQgYXNwaXJpbiBmb3IgY2hlc3QgcGFpbi4gSGlzdG9yeSBvZiBoeXBlcnRlbnNpb24u"
+        }
+      }
+    ]
+  },
+  {
+    "resourceType": "DocumentReference",
+    "id": "example-2",
+    "status": "current",
+    "subject": {
+      "reference": "Patient/5"
+    },
+    "content": [
+      {
+        "attachment": {
+          "contentType": "text/plain",
+          "data": "UGF0aWVudCBwcmVzZW50cyB3aXRoIGNvdWdoIGFuZCBmZXZlci4gRGlhZ25vc2VkIHdpdGggYnJvbmNoaXRpcy4gUHJlc2NyaWJlZCBhbnRpYmlvdGljcy4="
+        }
+      }
+    ]
+  }
+]

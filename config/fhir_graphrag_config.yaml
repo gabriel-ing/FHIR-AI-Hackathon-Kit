@@ -1,0 +1,182 @@
+# BYOT Configuration Schema for FHIR GraphRAG
+# This file defines the complete YAML configuration structure for rag-templates
+# to operate in BYOT (Bring Your Own Table) mode on FHIR native tables.
+
+# Database Connection Settings
+database:
+  iris:
+    host: "localhost"              # IRIS database host
+    port: 32782                    # IRIS database port
+    namespace: "DEMO"              # IRIS namespace
+    username: "_SYSTEM"            # Database username
+    password: "ISCDEMO"            # Database password (use environment variable in production)
+    connection_timeout: 30         # Connection timeout in seconds
+    pool_size: 5                   # Connection pool size
+    max_overflow: 10               # Maximum overflow connections
+
+# BYOT Storage Configuration
+storage:
+  iris:
+    # Custom table name for BYOT mode
+    table_name: "HSFHIR_X0001_R.Rsrc"
+
+    # Column mapping: Maps FHIR table columns to Document model
+    column_mapping:
+      id_column: "ID"              # Primary key column
+      text_column: "ResourceString" # Content column (FHIR JSON with hex-encoded notes)
+      metadata_columns:             # Additional metadata columns
+        - "ResourceType"
+        - "ResourceId"
+        - "Compartments"
+        - "Deleted"
+
+    # BYOT mode flags
+    zero_copy: true                 # Enable zero-copy mode (no data migration)
+    preserve_schema: true           # Read-only access (no schema modifications)
+
+    # Security and validation
+    validate_table_name: true       # Validate table name against SQL injection
+    allowed_schemas:                # Whitelist of allowed schema names
+      - "HSFHIR_X0001_R"
+
+# Vector Storage Configuration (existing vectors)
+vector_storage:
+  table_name: "VectorSearch.FHIRResourceVectors"
+  reference_column: "ResourceID"   # FK to FHIR native table
+  vector_column: "Vector"          # 384-dimensional vector column
+  model_column: "VectorModel"      # Embedding model name
+  dimension: 384                   # Vector dimensionality
+
+# Embedding Configuration
+embeddings:
+  model: "sentence-transformers/all-MiniLM-L6-v2"
+  dimension: 384
+  batch_size: 32                   # Batch size for embedding generation
+  normalize: true                  # Normalize embeddings to unit length
+  device: "cpu"                    # Device for embedding generation (cpu/cuda)
+
+# GraphRAG Pipeline Configuration
+pipelines:
+  graphrag:
+    # Entity extraction settings
+    entity_extraction_enabled: true
+
+    # Medical entity types to extract
+    entity_types:
+      - "SYMPTOM"          # Patient symptoms (cough, fever, chest pain)
+      - "CONDITION"        # Medical conditions (diabetes, hypertension)
+      - "MEDICATION"       # Prescribed medications (aspirin, metformin)
+      - "PROCEDURE"        # Medical procedures (blood test, x-ray)
+      - "BODY_PART"        # Anatomical locations (chest, lungs, heart)
+      - "TEMPORAL"         # Time references (2023-01-15, 3 days ago)
+
+    # Entity relationship types
+    relationship_types:
+      - "TREATS"           # medication TREATS condition
+      - "CAUSES"           # condition CAUSES symptom
+      - "LOCATED_IN"       # symptom LOCATED_IN body_part
+      - "CO_OCCURS_WITH"   # symptom CO_OCCURS_WITH symptom
+      - "PRECEDES"         # event PRECEDES event (temporal)
+
+    # Extraction confidence thresholds
+    min_entity_confidence: 0.7     # Minimum confidence to keep entity
+    min_relationship_confidence: 0.6  # Minimum confidence to keep relationship
+
+    # Graph traversal settings
+    default_top_k: 10              # Default number of results to return
+    max_depth: 2                   # Maximum graph traversal depth
+    max_entities: 50               # Maximum entities to extract per document
+    max_relationships: 100         # Maximum relationships to extract per document
+
+    # Multi-modal search weights
+    vector_k: 30                   # Top K from vector search
+    text_k: 30                     # Top K from text search
+    graph_k: 10                    # Top K from graph traversal
+
+    # RRF fusion parameters
+    rrf_k: 60                      # RRF constant (higher = more weight to top results)
+    fusion_method: "rrf"           # Reciprocal Rank Fusion algorithm
+
+    # Performance settings
+    batch_size: 10                 # Number of documents to process in batch
+    parallel_extraction: true      # Enable parallel entity extraction
+    max_workers: 4                 # Number of parallel workers
+
+# LLM Configuration (optional - for enhanced entity extraction)
+llm:
+  provider: "ollama"               # LLM provider (ollama, openai, etc.)
+  model: "gemma3:4b"               # LLM model for entity extraction
+  base_url: "http://localhost:11434"  # Ollama API endpoint
+  temperature: 0.0                 # Temperature for entity extraction (deterministic)
+  max_tokens: 500                  # Maximum tokens for entity extraction
+  timeout: 30                      # LLM request timeout in seconds
+  fallback_to_regex: true          # Fallback to regex if LLM unavailable
+
+# Logging Configuration
+logging:
+  level: "INFO"                    # Log level (DEBUG, INFO, WARNING, ERROR)
+  format: "json"                   # Log format (json, text)
+  file: "logs/fhir_graphrag.log"   # Log file path
+  rotation: "daily"                # Log rotation (daily, size)
+  max_bytes: 10485760              # Maximum log file size (10 MB)
+  backup_count: 7                  # Number of backup log files
+
+# Monitoring and Observability
+monitoring:
+  enabled: true
+  metrics:
+    - "entity_extraction_time"     # Time to extract entities per document
+    - "entity_extraction_count"    # Number of entities extracted
+    - "relationship_extraction_count"  # Number of relationships extracted
+    - "query_latency"              # Query execution time
+    - "graph_traversal_depth"      # Actual graph traversal depth used
+
+  # Performance targets for alerts
+  performance_targets:
+    entity_extraction_time_ms: 2000  # < 2 seconds per document
+    query_latency_ms: 1000          # < 1 second query response
+    knowledge_graph_build_time_ms: 300000  # < 5 minutes for 51 documents
+
+# Feature Flags
+features:
+  entity_normalization: false      # Entity text normalization (future enhancement)
+  temporal_analysis: false         # Temporal relationship analysis (future)
+  entity_feedback: false           # Manual entity correction (future)
+  query_history: false             # Query performance tracking (future)
+
+# Environment-Specific Overrides
+# These can be overridden by environment variables:
+# - FHIR_GRAPHRAG_DB_HOST
+# - FHIR_GRAPHRAG_DB_PORT
+# - FHIR_GRAPHRAG_DB_NAMESPACE
+# - FHIR_GRAPHRAG_DB_USERNAME
+# - FHIR_GRAPHRAG_DB_PASSWORD
+# - FHIR_GRAPHRAG_LLM_MODEL
+# - FHIR_GRAPHRAG_LOG_LEVEL
+
+# Configuration Validation Rules
+validation:
+  required_fields:
+    - "database.iris.host"
+    - "database.iris.port"
+    - "database.iris.namespace"
+    - "storage.iris.table_name"
+    - "storage.iris.column_mapping.id_column"
+    - "storage.iris.column_mapping.text_column"
+
+  field_types:
+    "database.iris.port": "integer"
+    "embeddings.dimension": "integer"
+    "pipelines.graphrag.min_entity_confidence": "float"
+    "pipelines.graphrag.entity_extraction_enabled": "boolean"
+
+  range_constraints:
+    "pipelines.graphrag.min_entity_confidence":
+      min: 0.0
+      max: 1.0
+    "pipelines.graphrag.min_relationship_confidence":
+      min: 0.0
+      max: 1.0
+    "pipelines.graphrag.max_depth":
+      min: 1
+      max: 5

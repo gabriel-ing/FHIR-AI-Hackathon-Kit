@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RAG.Entities Table Schema",
+  "description": "SQL DDL and constraints for the medical entity extraction table",
+  "type": "object",
+  "properties": {
+    "table_name": {
+      "const": "RAG.Entities"
+    },
+    "ddl": {
+      "type": "string",
+      "const": "CREATE TABLE RAG.Entities (\n  EntityID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n  EntityText VARCHAR(500) NOT NULL,\n  EntityType VARCHAR(50) NOT NULL,\n  ResourceID BIGINT NOT NULL,\n  Confidence FLOAT NOT NULL,\n  EmbeddingVector VECTOR(DOUBLE, 384),\n  ExtractedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  ExtractedBy VARCHAR(100) DEFAULT 'hybrid',\n  FOREIGN KEY (ResourceID) REFERENCES HSFHIR_X0001_R.Rsrc(ID) ON DELETE CASCADE ON UPDATE CASCADE,\n  CHECK (Confidence >= 0.0 AND Confidence <= 1.0),\n  CHECK (LENGTH(EntityText) > 0),\n  CHECK (EntityType IN ('SYMPTOM', 'CONDITION', 'MEDICATION', 'PROCEDURE', 'BODY_PART', 'TEMPORAL')),\n  UNIQUE (EntityText, EntityType, ResourceID)\n)"
+    },
+    "indexes": {
+      "type": "array",
+      "items": [
+        {
+          "name": "idx_entities_type",
+          "ddl": "CREATE INDEX idx_entities_type ON RAG.Entities(EntityType)"
+        },
+        {
+          "name": "idx_entities_confidence",
+          "ddl": "CREATE INDEX idx_entities_confidence ON RAG.Entities(Confidence)"
+        },
+        {
+          "name": "idx_entities_resource",
+          "ddl": "CREATE INDEX idx_entities_resource ON RAG.Entities(ResourceID)"
+        },
+        {
+          "name": "idx_entities_vector",
+          "ddl": "CREATE VECTOR INDEX idx_entities_vector ON RAG.Entities(EmbeddingVector)"
+        }
+      ]
+    },
+    "columns": {
+      "type": "array",
+      "items": [
+        {
+          "name": "EntityID",
+          "type": "BIGINT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true,
+          "description": "Unique identifier for the medical entity"
+        },
+        {
+          "name": "EntityText",
+          "type": "VARCHAR(500)",
+          "nullable": false,
+          "description": "The text of the extracted entity (e.g., 'chest pain', 'aspirin')"
+        },
+        {
+          "name": "EntityType",
+          "type": "VARCHAR(50)",
+          "nullable": false,
+          "enum": [
+            "SYMPTOM",
+            "CONDITION",
+            "MEDICATION",
+            "PROCEDURE",
+            "BODY_PART",
+            "TEMPORAL"
+          ],
+          "description": "Classification of the entity type"
+        },
+        {
+          "name": "ResourceID",
+          "type": "BIGINT",
+          "nullable": false,
+          "foreign_key": {
+            "table": "HSFHIR_X0001_R.Rsrc",
+            "column": "ID",
+            "on_delete": "CASCADE",
+            "on_update": "CASCADE"
+          },
+          "description": "Foreign key linking to the source FHIR DocumentReference resource"
+        },
+        {
+          "name": "Confidence",
+          "type": "FLOAT",
+          "nullable": false,
+          "min": 0.0,
+          "max": 1.0,
+          "description": "Extraction confidence score (0.0-1.0)"
+        },
+        {
+          "name": "EmbeddingVector",
+          "type": "VECTOR(DOUBLE, 384)",
+          "nullable": true,
+          "description": "384-dimensional embedding vector for semantic search"
+        },
+        {
+          "name": "ExtractedAt",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "description": "Timestamp when the entity was extracted"
+        },
+        {
+          "name": "ExtractedBy",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "default": "hybrid",
+          "enum": [
+            "regex",
+            "llm",
+            "hybrid"
+          ],
+          "description": "Method used for entity extraction"
+        }
+      ]
+    },
+    "constraints": {
+      "type": "array",
+      "items": [
+        {
+          "type": "CHECK",
+          "name": "chk_entities_confidence",
+          "expression": "Confidence >= 0.0 AND Confidence <= 1.0"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_entities_text",
+          "expression": "LENGTH(EntityText) > 0"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_entities_type",
+          "expression": "EntityType IN ('SYMPTOM', 'CONDITION', 'MEDICATION', 'PROCEDURE', 'BODY_PART', 'TEMPORAL')"
+        },
+        {
+          "type": "UNIQUE",
+          "name": "unq_entities_text_type_resource",
+          "columns": [
+            "EntityText",
+            "EntityType",
+            "ResourceID"
+          ],
+          "description": "Prevents duplicate extraction of the same entity from the same document"
+        }
+      ]
+    },
+    "expected_row_count": {
+      "initial": 100,
+      "description": "Expected to extract 100+ medical entities from 51 DocumentReference resources"
+    },
+    "sample_data": [
+      {
+        "EntityID": 1,
+        "EntityText": "chest pain",
+        "EntityType": "SYMPTOM",
+        "ResourceID": 42,
+        "Confidence": 0.95,
+        "EmbeddingVector": "[0.023, -0.145, ...]",
+        "ExtractedAt": "2025-11-06T10:30:00",
+        "ExtractedBy": "hybrid"
+      },
+      {
+        "EntityID": 2,
+        "EntityText": "aspirin",
+        "EntityType": "MEDICATION",
+        "ResourceID": 42,
+        "Confidence": 0.92,
+        "EmbeddingVector": "[-0.089, 0.234, ...]",
+        "ExtractedAt": "2025-11-06T10:30:01",
+        "ExtractedBy": "regex"
+      },
+      {
+        "EntityID": 3,
+        "EntityText": "hypertension",
+        "EntityType": "CONDITION",
+        "ResourceID": 43,
+        "Confidence": 0.98,
+        "EmbeddingVector": "[0.156, -0.067, ...]",
+        "ExtractedAt": "2025-11-06T10:30:02",
+        "ExtractedBy": "llm"
+      }
+    ]
+  }
+}

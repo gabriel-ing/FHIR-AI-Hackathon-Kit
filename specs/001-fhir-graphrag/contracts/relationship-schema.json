@@ -1,0 +1,195 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RAG.EntityRelationships Table Schema",
+  "description": "SQL DDL and constraints for the entity relationship table",
+  "type": "object",
+  "properties": {
+    "table_name": {
+      "const": "RAG.EntityRelationships"
+    },
+    "ddl": {
+      "type": "string",
+      "const": "CREATE TABLE RAG.EntityRelationships (\n  RelationshipID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n  SourceEntityID BIGINT NOT NULL,\n  TargetEntityID BIGINT NOT NULL,\n  RelationshipType VARCHAR(50) NOT NULL,\n  ResourceID BIGINT NOT NULL,\n  Confidence FLOAT NOT NULL,\n  ExtractedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  Context VARCHAR(1000),\n  FOREIGN KEY (SourceEntityID) REFERENCES RAG.Entities(EntityID) ON DELETE CASCADE ON UPDATE CASCADE,\n  FOREIGN KEY (TargetEntityID) REFERENCES RAG.Entities(EntityID) ON DELETE CASCADE ON UPDATE CASCADE,\n  FOREIGN KEY (ResourceID) REFERENCES HSFHIR_X0001_R.Rsrc(ID) ON DELETE CASCADE ON UPDATE CASCADE,\n  CHECK (Confidence >= 0.0 AND Confidence <= 1.0),\n  CHECK (SourceEntityID != TargetEntityID),\n  CHECK (RelationshipType IN ('TREATS', 'CAUSES', 'LOCATED_IN', 'CO_OCCURS_WITH', 'PRECEDES')),\n  UNIQUE (SourceEntityID, TargetEntityID, RelationshipType)\n)"
+    },
+    "indexes": {
+      "type": "array",
+      "items": [
+        {
+          "name": "idx_relationships_type",
+          "ddl": "CREATE INDEX idx_relationships_type ON RAG.EntityRelationships(RelationshipType)"
+        },
+        {
+          "name": "idx_relationships_source",
+          "ddl": "CREATE INDEX idx_relationships_source ON RAG.EntityRelationships(SourceEntityID)"
+        },
+        {
+          "name": "idx_relationships_target",
+          "ddl": "CREATE INDEX idx_relationships_target ON RAG.EntityRelationships(TargetEntityID)"
+        },
+        {
+          "name": "idx_relationships_source_type",
+          "ddl": "CREATE INDEX idx_relationships_source_type ON RAG.EntityRelationships(SourceEntityID, RelationshipType)"
+        }
+      ]
+    },
+    "columns": {
+      "type": "array",
+      "items": [
+        {
+          "name": "RelationshipID",
+          "type": "BIGINT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true,
+          "description": "Unique identifier for the relationship"
+        },
+        {
+          "name": "SourceEntityID",
+          "type": "BIGINT",
+          "nullable": false,
+          "foreign_key": {
+            "table": "RAG.Entities",
+            "column": "EntityID",
+            "on_delete": "CASCADE",
+            "on_update": "CASCADE"
+          },
+          "description": "ID of the source entity in the relationship"
+        },
+        {
+          "name": "TargetEntityID",
+          "type": "BIGINT",
+          "nullable": false,
+          "foreign_key": {
+            "table": "RAG.Entities",
+            "column": "EntityID",
+            "on_delete": "CASCADE",
+            "on_update": "CASCADE"
+          },
+          "description": "ID of the target entity in the relationship"
+        },
+        {
+          "name": "RelationshipType",
+          "type": "VARCHAR(50)",
+          "nullable": false,
+          "enum": [
+            "TREATS",
+            "CAUSES",
+            "LOCATED_IN",
+            "CO_OCCURS_WITH",
+            "PRECEDES"
+          ],
+          "description": "Type of relationship between entities"
+        },
+        {
+          "name": "ResourceID",
+          "type": "BIGINT",
+          "nullable": false,
+          "foreign_key": {
+            "table": "HSFHIR_X0001_R.Rsrc",
+            "column": "ID",
+            "on_delete": "CASCADE",
+            "on_update": "CASCADE"
+          },
+          "description": "FHIR resource where the relationship was identified"
+        },
+        {
+          "name": "Confidence",
+          "type": "FLOAT",
+          "nullable": false,
+          "min": 0.0,
+          "max": 1.0,
+          "description": "Relationship extraction confidence score (0.0-1.0)"
+        },
+        {
+          "name": "ExtractedAt",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "description": "Timestamp when the relationship was extracted"
+        },
+        {
+          "name": "Context",
+          "type": "VARCHAR(1000)",
+          "nullable": true,
+          "description": "Text snippet showing the context where the relationship was found"
+        }
+      ]
+    },
+    "constraints": {
+      "type": "array",
+      "items": [
+        {
+          "type": "CHECK",
+          "name": "chk_relationships_confidence",
+          "expression": "Confidence >= 0.0 AND Confidence <= 1.0"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_relationships_no_self_loop",
+          "expression": "SourceEntityID != TargetEntityID"
+        },
+        {
+          "type": "CHECK",
+          "name": "chk_relationships_type",
+          "expression": "RelationshipType IN ('TREATS', 'CAUSES', 'LOCATED_IN', 'CO_OCCURS_WITH', 'PRECEDES')"
+        },
+        {
+          "type": "UNIQUE",
+          "name": "unq_relationships_source_target_type",
+          "columns": [
+            "SourceEntityID",
+            "TargetEntityID",
+            "RelationshipType"
+          ],
+          "description": "Prevents duplicate relationships between the same entity pair"
+        }
+      ]
+    },
+    "expected_row_count": {
+      "initial": 50,
+      "description": "Expected to extract 50+ entity relationships from 51 DocumentReference resources"
+    },
+    "sample_data": [
+      {
+        "RelationshipID": 1,
+        "SourceEntityID": 2,
+        "TargetEntityID": 1,
+        "RelationshipType": "TREATS",
+        "ResourceID": 42,
+        "Confidence": 0.89,
+        "ExtractedAt": "2025-11-06T10:30:05",
+        "Context": "Patient prescribed aspirin for chest pain"
+      },
+      {
+        "RelationshipID": 2,
+        "SourceEntityID": 3,
+        "TargetEntityID": 1,
+        "RelationshipType": "CAUSES",
+        "ResourceID": 43,
+        "Confidence": 0.91,
+        "ExtractedAt": "2025-11-06T10:30:06",
+        "Context": "Hypertension may cause chest pain in some patients"
+      },
+      {
+        "RelationshipID": 3,
+        "SourceEntityID": 1,
+        "TargetEntityID": 4,
+        "RelationshipType": "LOCATED_IN",
+        "ResourceID": 42,
+        "Confidence": 0.95,
+        "ExtractedAt": "2025-11-06T10:30:07",
+        "Context": "Reports pain located in chest area"
+      }
+    ],
+    "graph_properties": {
+      "directed": true,
+      "allows_cycles": true,
+      "weighted": true,
+      "weight_attribute": "Confidence",
+      "bidirectional_relationships": [
+        "CO_OCCURS_WITH"
+      ],
+      "description": "Entity relationships form a directed, weighted graph where CO_OCCURS_WITH relationships are stored bidirectionally"
+    }
+  }
+}

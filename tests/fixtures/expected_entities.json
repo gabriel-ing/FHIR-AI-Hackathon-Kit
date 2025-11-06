@@ -1,0 +1,80 @@
+[
+  {
+    "document_id": "example-1",
+    "expected_entities": [
+      {
+        "entity_text": "chest pain",
+        "entity_type": "SYMPTOM",
+        "min_confidence": 0.8
+      },
+      {
+        "entity_text": "shortness of breath",
+        "entity_type": "SYMPTOM",
+        "min_confidence": 0.8
+      },
+      {
+        "entity_text": "aspirin",
+        "entity_type": "MEDICATION",
+        "min_confidence": 0.9
+      },
+      {
+        "entity_text": "hypertension",
+        "entity_type": "CONDITION",
+        "min_confidence": 0.9
+      }
+    ],
+    "expected_relationships": [
+      {
+        "source": "aspirin",
+        "target": "chest pain",
+        "relationship_type": "TREATS",
+        "min_confidence": 0.7
+      },
+      {
+        "source": "hypertension",
+        "target": "chest pain",
+        "relationship_type": "CAUSES",
+        "min_confidence": 0.7
+      }
+    ]
+  },
+  {
+    "document_id": "example-2",
+    "expected_entities": [
+      {
+        "entity_text": "cough",
+        "entity_type": "SYMPTOM",
+        "min_confidence": 0.8
+      },
+      {
+        "entity_text": "fever",
+        "entity_type": "SYMPTOM",
+        "min_confidence": 0.8
+      },
+      {
+        "entity_text": "bronchitis",
+        "entity_type": "CONDITION",
+        "min_confidence": 0.9
+      },
+      {
+        "entity_text": "antibiotics",
+        "entity_type": "MEDICATION",
+        "min_confidence": 0.8
+      }
+    ],
+    "expected_relationships": [
+      {
+        "source": "antibiotics",
+        "target": "bronchitis",
+        "relationship_type": "TREATS",
+        "min_confidence": 0.8
+      },
+      {
+        "source": "cough",
+        "target": "fever",
+        "relationship_type": "CO_OCCURS_WITH",
+        "min_confidence": 0.7
+      }
+    ]
+  }
+]
