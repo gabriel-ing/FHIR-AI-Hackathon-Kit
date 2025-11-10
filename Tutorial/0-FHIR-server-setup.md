@@ -6,7 +6,7 @@ If you would rather set up a FHIR server from scratch with a clean edition of IR
 
 To start, clone this repository: 
 
-	git clone https://github.com/gabriel-ing/FHIR-AI-Hackathon-Kit
+	git clone https://github.com/intersystems-community/FHIR-AI-Hackathon-Kit
 
 Then enter FHIR-AI-Hackathon-Kit/Dockerfhir:
 
