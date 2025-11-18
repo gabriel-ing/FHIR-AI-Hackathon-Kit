@@ -55,8 +55,8 @@ do ##class(Security.Users).UnExpireUserPasswords("*")
 
 ```
 set $NAMESPACE = "HSLIB"
-do:'##class(%SYS.Namespace).Exists("fhir") ##class(HS.Util.Installer.Foundation).Install("fhir")
-set $NAMESPACE = "fhir"
+do:'##class(%SYS.Namespace).Exists("fhirdemo") ##class(HS.Util.Installer.Foundation).Install("fhirdemo")
+set $NAMESPACE = "fhirdemo"
 ```
 
 #### Install the FHIR server
@@ -161,8 +161,8 @@ print(res.json())
 Cross-Origin Resource Sharing (CORS) is a security feature in modern web browsers. While a complete discussion of CORS is beyond the scope of this guide, the ObjectScript commands below sets the CORS configuration to allow all domains, HTTP methods, common headers and credentials. This set-up may be helpful in development environments, particularly for web development, but should be more carefully considered for production environments. 
 
 ```
-// Switch to the "fhir" namespace where the FHIR server is running
-set $NAMESPACE = "fhir"
+// Switch to the "fhirdemo" namespace where the FHIR server is running
+set $NAMESPACE = "fhirdemo"
 
 // Define the CORS configuration name
 set configName = "%CSP.CORS"
