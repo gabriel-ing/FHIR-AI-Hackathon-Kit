@@ -12,15 +12,25 @@ RUN --mount=type=bind,src=.,dst=. \
 	iris session IRIS < iris.script && \
     iris stop IRIS quietly
 
-USER root
-RUN sed -i -e 's|http://localhost:52773/crud/_spec|/fhirUI/irisfhir_swagger.json|g' /usr/irissys/csp/swagger-ui/index.html
-RUN sed -i -e 's|http://localhost:52773/crud/_spec|/fhirUI/irisfhir_swagger.json|g' /usr/irissys/csp/swagger-ui/swagger-initializer.js
-RUN sed -i -e 's|http://localhost:52773/crud/_spec|/fhirUI/irisfhir_swagger.json|g' /usr/irissys/csp/swagger-ui/swagger-ui-bundle.js
-
-RUN sed -i -e 's|/fhir/r4|/csp/healthshare/demo/fhir/r4|g' /usr/irissys/csp/fhir/fhirUI/resources/js/myFHIR.js
+RUN sed -i -e 's|http://localhost:52773/crud/_spec|/fhirUI/irisfhir_swagger.json|g' /usr/irissys/csp/swagger-ui/index.html \
+    && echo "index.html updated successfully" \
+    || (echo "Failed to update index.html" && exit 1)
 
 
-USER ${ISC_PACKAGE_MGRUSER}
+RUN sed -i -e 's|http://localhost:52773/crud/_spec|/fhirUI/irisfhir_swagger.json|g' /usr/irissys/csp/swagger-ui/swagger-initializer.js \ 
+    && echo "swagger-initialiser.js updated successfully" \
+    || (echo "Failed to update index.html" && exit 1)
+
+
+RUN sed -i -e 's|http://localhost:52773/crud/_spec|/fhirUI/irisfhir_swagger.json|g' /usr/irissys/csp/swagger-ui/swagger-ui-bundle.js \
+    && echo "swagger-bundle.js updated successfully" \
+    || (echo "Failed to update index.html" && exit 1)
+
+
+RUN sed -i -e 's|/fhir/r4|/csp/healthshare/demo/fhir/r4|g' /usr/irissys/csp/fhir/portal/resources/js/myFHIR.js \
+    && echo "index.html updated successfully" \
+    || (echo "Failed to update index.html" && exit 1)
+
 
 FROM $IMAGE as final
 
