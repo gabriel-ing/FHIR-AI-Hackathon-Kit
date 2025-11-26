@@ -11,34 +11,34 @@ This repo has 4 main sections:
     - Implementing a vector search
     - Creating a chatbot
 - **Additional Demos** - Some additional tutorials with other ways to use the IRIS FHIR server with Python. This includes: 
-    - Accessing FHIR resources directly
-    - Adding data to the FHIR server
-    - Generating Synthetic data
-    - Integrated Machine Learning in IRIS
-    - Creating a FHIR server From Scratch
-    - Links to a demo of Vibe-coding a UI for a FHIR server
+    - [Accessing FHIR resources directly](./Additional-demos/Accessing-FHIR-resources.ipynb)
+    - [Adding data to the FHIR server](./Additional-demos/Adding-FHIR-data-to-IRIS-health.ipynb)
+    - [Generating Synthetic data](./Additional-demos/Making-synthetic-fhir-data.md)
+    - [Integrated Machine Learning in IRIS](./Additional-demos/integratedML.md)
+    - [Creating a FHIR server From Scratch](./Additional-demos/CreateAFHIRServerIn5Minutes.md)
+    - [Article about Vibe-coding with FHIR](./Additional-demos/VibeCoding-FHIR-UI.md) 
 - **Resources** - Some brief introductions that may be useful to get started quickly. These include: 
-    - What is InterSystems IRIS
-    - What is Retrieval augmented generation (RAG)
-    - What is FHIR
-- **Dockerfhir** - Files to create a local IRIS-health-community instance and FHIR server with Docker. The main tutorial covers how this should be used. 
+    - [What is InterSystems IRIS](./Reference/what-is-IRIS.md)
+    - [What is FHIR](./Reference/what-is-FHIR.md)
+    - [What is Retrieval augmented generation (RAG)](./Reference/what-is-RAG.md)
+
+- **Dockerfhir** - Files to create a local IRIS-health-community instance and FHIR server with Docker. The [main tutorial](./Tutorial/0-FHIR-server-setup.md) covers how this should be used. 
 
 ## Requirements 
 
-- **DOCKER** - The IRIS-health instance and FHIR server in all examples are run in a docker container, for this you will need to install [Docker](https://www.docker.com/)
+- **Python** - The tutorial is Python based, so will need Python installed on your computer
+
+- **Docker** - The IRIS-health instance and FHIR server in all examples are run in a docker container, for this you will need to install [Docker](https://www.docker.com/)
 
 - **Ollama** - The last step of the main tutorial is to query a local Large Language model, which I have done through Ollama. If you are interested in using a local chatbot, you're best to install Ollama which can be done from their [website](https://ollama.com/).
-
-- **IRIS-Python Driver** - You will also need the InterSystems python driver throughout, this can be installed with pip: `pip install intersystems-irispython`. 
  
-- **Other Python Packages** - Various other python packages are used throughout, these are listed in the requirements.txt file and can be installed easily: `pip install -r requirements.txt`. I've stated whenever a new pacakage is used throughout the demos, so if you'd rather only install the packages you need you can skip this and install the remaining packages when you need them.
-
+- **Python Packages** - Various other python packages are used throughout, these are listed in the requirements.txt file and can be installed easily: `pip install -r requirements.txt`. I've stated whenever a new pacakage is used throughout the demos, so if you'd rather only install the packages you need you can skip this and install the remaining packages when you need them.
 
 # FHIR + AI Chatbot Demo
 
 ## Introduction
 
-In this tutorial, I will go through how FHIR data can be combined with IRIS vector search capabilities to build a powerful tool for medical professionals wanting to quickly understand the medical history of a patient. 
+The main tutorial demonstrates how FHIR data can be combined with IRIS vector search capabilities to build a powerful tool for medical professionals wanting to quickly understand the medical history of a patient. 
 
 We are going to take the data from 'DocumentReference' resources, these consist of clinical notes attached in plain text. This plain text is encoded within the resource and will need to be decoded.
 
@@ -73,9 +73,4 @@ This is a start-to-finish tutorial which goes through:
 1. Create a prompt that includes system instructions,  relevant notes, and a user query
 2. Pass prompt to a Large Language Model
 3. Return output to user
-
-## Video Demo
-
-https://github.com/user-attachments/assets/e6d24c52-a4f8-4d73-be62-fa39352515b8
-
 

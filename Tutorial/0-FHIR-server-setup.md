@@ -38,30 +38,27 @@ the -d flag makes it run in the background.
 
 ## Access the IRIS Management Portal
 
-Open your browser and go to:
+Once the container is started, open your browser and go to:
  **[http://localhost:32783/csp/sys/UtilHome.csp](http://localhost:32783/csp/sys/UtilHome.csp)**  
+
+
 **Login Credentials:**
 - **Username:** `_SYSTEM`
 - **Password:** `ISCDEMO`
-
-In the docker compose file, the container ports 1972 and 52773 have been mapped to 32782 and 32783 respectively. 
 
 Note, sometimes it takes a minute for the management portal to come online here, so if nothing appears at the link above, wait a couple of minutes, then refresh the page. 
 
 ## Explore the FHIR server
  
-The FHIR server should now be available at http://localhost:32783/csp/healthshare/demo/fhir/r4. 
+The FHIR server should now be available at http://localhost:32783/csp/healthshare/demo/fhir/r4, although you won't see anything at this base-URL. To test that the server is online, you can go to http://localhost:32783/csp/healthshare/demo/fhir/r4/metadata. This should automatically download a file (metadata.json) containing metadata about the FHIR server. 
 
-To test that the server is online, you can go to http://localhost:32783/csp/healthshare/demo/fhir/r4/metadata . This should automatically download a file (metadata.json) containing metadata about the FHIR server. 
-
-You can explore the FHIR data at a user interface at: 
+You can also explore the FHIR data at a user interface at: 
 
 http://localhost:32783/fhir/portal/patientlist.html
 
 ![FHIR Portal](images/fhir-portal.png)
 
-This interface is provided by the [iris-fhir-portal](https://openexchange.intersystems.com/package/iris-fhir-portal?tab=details) package which has been pre-loaded. Credit to the author, Henrique Dias.
-
+This interface is provided by the [iris-fhir-portal](https://openexchange.intersystems.com/package/iris-fhir-portal?tab=details) package which has been pre-loaded. All credit to the package author, Henrique Dias.
 
 You can also explore and test the FHIR server using Swagger-UI, which provides a user interface to the FHIR HTTP specification. This can be found at http://localhost:32783/swagger-ui/index.html. 
 
@@ -131,7 +128,6 @@ You may want to access the terminal within your instance of InterSystems IRIS fo
 	```
 
 ## Next Steps
-
 
 Now you have installed the FHIR server you can continue with the main tutorial with [1-Using-FHIR-SQL-builder](1-Using-FHIR-SQL-Builder.ipynb), or check out the additional demos on [Accessing FHIR Resources](../Additional-demos/Accessing-FHIR-resources.ipynb), 
 [Adding FHIR Data](../Additional-demos\Adding-FHIR-data-to-IRIS-health.ipynb) and [making synthetic FHIR data](../Additional-demos/Making-synthetic-fhir-data.md).
