@@ -16,7 +16,7 @@ This repo has 4 main sections:
     - [Generating Synthetic data](./Additional-demos/Making-synthetic-fhir-data.md)
     - [Integrated Machine Learning in IRIS](./Additional-demos/integratedML.md)
     - [Creating a FHIR server From Scratch](./Additional-demos/CreateAFHIRServerIn5Minutes.md)
-    - [Article about Vibe-coding with FHIR](./Additional-demos/VibeCoding-FHIR-UI.md) 
+
 - **Resources** - Some brief introductions that may be useful to get started quickly. These include: 
     - [What is InterSystems IRIS](./Reference/what-is-IRIS.md)
     - [What is FHIR](./Reference/what-is-FHIR.md)
